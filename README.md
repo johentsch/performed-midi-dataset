@@ -78,7 +78,9 @@ You can test with every piece of one of the following authors:
 - Bach
 - Balakirev
 - Beethoven
+- Brahms
 - Chopin
+- Debussy
 - Glinka
 - Haydn
 - Liszt
