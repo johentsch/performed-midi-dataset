@@ -1,29 +1,48 @@
-
----
-#### curation procedure
-
-...
+# Performed midi dataset
 
 
----
-#### objectives
+The dataset contains 997 performances of 205 opus.
 
-build a dataset containing
-- score files 
+
+List of authors:
+- Bach
+- Balakirev
+- Beethoven
+- Brahms
+- Chopin
+- Debussy
+- Glinka
+- Haydn
+- Liszt
+- Mozart
+- Prokofiev
+- Rachmaninoff
+- Ravel
+- Schubert
+- Schumann
+- Scriabin
+
+#### Objectives
+
+Build a dataset containing
+- XML score files 
+- MIDI score
 - MIDI performances
-- down-beat / beat annotation (dates in performance)
+- down-beat / beat annotations (dates in performance)
+- alignments between each event in the MIDI performance and the corresponding event in the XML score
 
 
-usage:
-- usage:
-  - ground truth for position of bars (in MIDI perfo)
-    → evaluation of beat tracking
-  - ground truth for evaluation of transcription
-    (bar-by-bar transcription taking the bar positions in input)
+#### Usage:
+- ground truth for MIDI piano automatic music transcription (AMT) tasks
+    - MIDI beat/downbeat tracking
+    - MIDI quantization
+    - voice separations
+    - score structuring
+- ground truth for piano expressive performance models
     
 
 ---
-#### source Dataset
+## Source Dataset
 the dataset is obtained by curating the following dataset by Jeong et al.
 (manual cleaning of the beat mark annotations)
 
@@ -31,7 +50,7 @@ the dataset is obtained by curating the following dataset by Jeong et al.
 - this dataset is used for the evalution of `VirtuosoNet` 
   https://github.com/jdasam/virtuosoNet
 - the dataset is not public
-- solo piano music, polyphonic, symbolic (MIDI + annote)
+- solo piano music, classical music, polyphonic, symbolic (MIDI + annote)
 
 refs:
 
@@ -52,16 +71,13 @@ Dasaem Jeong, Taegyun Kwon, Yoojin Kim, Juhan Nam
 > ISMIR 2019
 > http://archives.ismir.net/ismir2019/paper/000112.pdf
 
-for each opus:
-- MIDI performance
-  from Yamaha competition
-- musicXML score
-  from musescore
-- MIDI quantified (MIDI score)
-  obtained from musicXML with Musescore
-- alignement (txt file) 
-  obtained from the 2 MIDI files with following Nakamura algo.
-  = ground truth?
+The dataset contains a set of performances from Yamaha competition (multiple performances of the same opus are present). The following files are associated to each performance:
+- XML score from musescore in musicXML format
+- MIDI score (quantified MIDI) produced with Musescore from the musicXML file, duplicating the eventual repetitions in the score.
+- alignement (txt file)  between the performed midi and the score midi,
+  obtained with the Nakamura algo below.
+- alignment (txt file) between the performed midi and the xml score, 
+  obtained with the Nakamura algo below.
   
 > Performance Error Detection and Post-Processing for Fast and Accurate Symbolic Music Alignment  
 > Eita Nakamura, Kazuyoshi Yoshii, Haruhiro Katayose
@@ -74,23 +90,8 @@ for each opus:
 available at:  
 https://github.com/fosfrancesco/performed-midi-dataset
 
-You can test with every piece of one of the following authors:
-- Bach
-- Balakirev
-- Beethoven
-- Brahms
-- Chopin
-- Debussy
-- Glinka
-- Haydn
-- Liszt
-- Mozart
-- Prokofiev
-- Rachmaninoff
-- Ravel
-- Schubert
-- Schumann
-- Scriabin
+
+
 
 The procedure is:
 - Choose a Folder from the dataset (from authors above)
