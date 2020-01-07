@@ -71,10 +71,13 @@ Dasaem Jeong, Taegyun Kwon, Yoojin Kim, Juhan Nam
 > ISMIR 2019
 > http://archives.ismir.net/ismir2019/paper/000112.pdf
 
-The dataset contains a set of performances from Yamaha competition (multiple performances of the same opus are present). The following files are associated to each performance:
+The dataset contains a set of performances from Yamaha competition 
+(multiple performances of the same opus are present). The following files 
+are associated to each performance:
 - XML score from musescore in musicXML format
-- MIDI score (quantified MIDI) produced with Musescore from the musicXML file, duplicating the eventual repetitions in the score.
-- alignement (txt file)  between the performed midi and the score midi,
+- MIDI score (quantified MIDI) produced with Musescore from the musicXML file, 
+   duplicating the eventual repetitions in the score.
+- alignement (txt file) between the performed midi and the score midi,
   obtained with the Nakamura algo below.
 - alignment (txt file) between the performed midi and the xml score, 
   obtained with the Nakamura algo below.
@@ -104,6 +107,15 @@ To export labels: File -> Export -> Labels : `ann_quant_cleaned.txt`
 
 Test it, but don't work on it yet, because I need to figure out why it doesn't work for some authors.
 
+### Notes Philippe
 
+I understand that `midi_cleaned.mid` is a midi file produced from the score 
+and I assume that the audio file has been generated from the same source.
+
+It is unclear how the alignment file `ann_quant.txt` has been produced. There is the mention
+of a "performed midi" and "score midi". Which text file is it? Also there are
+two text files mentioned above. I am a bit lost.
+
+Overall it seems that we do not annotate a true performance but a generated MIDI.
 
 
