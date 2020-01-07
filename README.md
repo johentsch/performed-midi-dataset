@@ -1,8 +1,12 @@
+Performed MIDI Dataset
+
+
 
 ---
 #### curation procedure
 
 ...
+
 
 
 ---
@@ -16,17 +20,20 @@ build a dataset containing
 
 usage:
 - usage:
-  - ground truth for position of bars (in MIDI perfo)
-    → evaluation of beat tracking
-  - ground truth for evaluation of transcription
-    (bar-by-bar transcription taking the bar positions in input)
-    
+  - evaluation of symbolic  beat tracking procedure
+    ground truth = annotations of positions of bars (in MIDI perfo)
+  
+  - evaluation of transcription
+    bar-by-bar transcription taking the bar positions in input
+  
+    ground truth = scores 
+  
+   
 
 ---
 #### source Dataset
-the dataset is obtained by curating the following dataset by Jeong et al.
+the dataset is build by curation of the following dataset by Jeong et al.
 (manual cleaning of the beat mark annotations)
-
 
 - this dataset is used for the evalution of `VirtuosoNet` 
   https://github.com/jdasam/virtuosoNet
@@ -34,13 +41,10 @@ the dataset is obtained by curating the following dataset by Jeong et al.
 - solo piano music, polyphonic, symbolic (MIDI + annote)
 
 refs:
-
-
 > Graph Neural Network for Music Score Data and Modeling Expressive Piano Performance
-Dasaem Jeong, Taegyun Kwon, Yoojin Kim, Juhan Nam 
+> Dasaem Jeong, Taegyun Kwon, Yoojin Kim, Juhan Nam 
 > Proceedings of the 36th International Conference on Machine Learning, PMLR 97:3060-3070, 2019.
 > http://proceedings.mlr.press/v97/jeong19a.html
-
 
 > VirtuosoNet: A Hierarchical Attention RNN for Generating Expressive Piano Performance from Music Score
 > Dasaem Jeong, Taegyun Kwon, Juhan Nam
@@ -69,7 +73,7 @@ for each opus:
 > https://eita-nakamura.github.io/articles/EN_etal_ErrorDetectionAndRealignment_ISMIR2017.pdf
 
 ---
-#### dataset content and curation procedure
+#### dataset content and procedure
 
 available at:  
 https://github.com/fosfrancesco/performed-midi-dataset
@@ -78,6 +82,7 @@ You can test with every piece of one of the following authors:
 - Bach
 - Balakirev
 - Beethoven
+- Chopin
 - Brahms
 - Chopin
 - Debussy
@@ -104,7 +109,4 @@ The procedure is:
 To export labels: File -> Export -> Labels : `ann_quant_cleaned.txt`
 
 Test it, but don't work on it yet, because I need to figure out why it doesn't work for some authors.
-
-
-
-
+Test it, but don't work on it yet, because I need to figure out why it doesn't work for some authors.
