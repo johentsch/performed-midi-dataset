@@ -91,8 +91,6 @@ available at:
 https://github.com/fosfrancesco/performed-midi-dataset
 
 
-
-
 The procedure is:
 - Choose a Folder from the dataset (from authors above)
 - Open Audacity https://www.audacityteam.org/
