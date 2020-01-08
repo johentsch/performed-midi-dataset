@@ -27,9 +27,10 @@ The dataset contains 1104 performances of 205 opus of classical piano, polyphoni
 
 Build a dataset of classical piano, polyphonic MIDI performances, where each performance is associated to a:
 - XML score files 
-- MIDI score
-- down-beat / beat annotations (dates in performance)
-- alignments between each event in the MIDI performance and the corresponding event in the XML score
+- MIDI score: a quantized MIDI file, similar to the XML score files, but in MIDI format and with the repetitions unravelled
+- downbeats/beats position in the MIDI score
+- downbeats/beats position in the MIDI performed
+- alignments between each event in the MIDI performance and the corresponding event in the XML score 
 - alignments between each event in the MIDI performance and the corresponding event in the MIDI score
 
 
