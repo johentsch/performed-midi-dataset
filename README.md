@@ -41,7 +41,7 @@ Build a dataset of classical piano, polyphonic MIDI performances, where each per
     - voice separations
     - score structuring
 - ground truth for piano expressive performance models
-    
+  
 
 ---
 ## Source Dataset
@@ -78,6 +78,7 @@ The source dataset contains a set of performances from Yamaha competition (multi
 - automatic alignement (txt file)  between the performed midi and the score midi: `[performance]_infer_match.txt`
 - automatic alignment (txt file) between the performed midi and the xml score: `[performance]_infer_corresp.txt`
   
+
 The automatic alignment is produced with the following algoritm:
 > Performance Error Detection and Post-Processing for Fast and Accurate Symbolic Music Alignment  
 > Eita Nakamura, Kazuyoshi Yoshii, Haruhiro Katayose
@@ -122,3 +123,8 @@ The new workflow is:
 3. generate the beats/downbeats for the MIDI performances, using the corrected MIDI score annotations and the automatic midi2midi alignment (file `ann_unquant.txt`)
 4. manually correct the beats/downbeats of the MIDI performance (file `ann_unquant_cleaned.txt`)
 
+
+
+see table at:
+
+[https://docs.google.com/spreadsheets/d/1Ep2KYIxaz0Uwedi0f-FO4QLtoAq_Lv05Yybx8kayeBM](https://docs.google.com/spreadsheets/d/1Ep2KYIxaz0Uwedi0f-FO4QLtoAq_Lv05Yybx8kayeBM)
