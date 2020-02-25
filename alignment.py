@@ -57,7 +57,8 @@ def normalize_midi_notes(notes):
 
 
 
-def notes_are_similar(notes1, notes2, number_to_match=None, align_end=False, tol=0.03):
+def notes_are_similar(notes1, notes2, number_to_match=None, cut_to_min=False,
+                      align_end=False, tol=0.03):
     """
     Test if two notes lists are the same, within some tolerance and up to some
     number of notes. Note start and end times are allowed some given tolerance,
@@ -75,6 +76,10 @@ def notes_are_similar(notes1, notes2, number_to_match=None, align_end=False, tol
         
     number_to_match : int
         Check for matches on the first this many notes. If None, check all notes.
+        
+    cut_to_min : boolean
+        If True, cut the length of the longer list to the length of the shorter
+        list.
         
     align_end : boolean
         If True, align the ends of the two excerpts, and cut each note list to the length
@@ -105,6 +110,11 @@ def notes_are_similar(notes1, notes2, number_to_match=None, align_end=False, tol
         notes1 = normalize_midi_notes(notes1[-min(len(notes1), len(notes2)):])
         notes2 = normalize_midi_notes(notes2[-len(notes1):])
         
+    # Cut the longer piece to the shorter one's length
+    if cut_to_min:
+        notes1 = notes1[:min(len(notes1), len(notes2))]
+        notes2 = notes2[:len(notes1)]
+        
     # Here, the note lengths should be equal
     if len(notes1) != len(notes2):
         return False
@@ -119,7 +129,8 @@ def notes_are_similar(notes1, notes2, number_to_match=None, align_end=False, tol
 
 
 def find_match(vnet_row, maestro, vnet_notes, maestro_notes, matches, vnet_base='.',
-               maestro_base='maestro', num_notes=None, align_end=False, verbose=False):
+               maestro_base='maestro', num_notes=None, cut_to_min=False,
+               align_end=False, verbose=False):
     """
     Find the match of a single row of the VirtuosoNet df, given
     a maestro df.
@@ -152,6 +163,10 @@ def find_match(vnet_row, maestro, vnet_notes, maestro_notes, matches, vnet_base=
     num_notes : int
         Check for matches on the first this many notes. If None, check all notes.
         
+    cut_to_min : boolean
+        If True, cut the length of the longer list to the length of the shorter
+        list.
+        
     align_end : boolean
         If True, align the ends of the two excerpts, and cut each note list to the length
         of the shorter one (by removing notes from the beginning of the long one).
@@ -178,7 +193,7 @@ def find_match(vnet_row, maestro, vnet_notes, maestro_notes, matches, vnet_base=
         maestro_row_notes = maestro_notes[idx]
         
         if notes_are_similar(vnet_row_notes, maestro_row_notes, number_to_match=num_notes,
-                             align_end=align_end):
+                             cut_to_min=cut_to_min, align_end=align_end):
             if verbose:
                 print(f'    Match found: "{maestro_row.midi_filename}"')
             if vnet_row.name not in matches:
@@ -211,6 +226,9 @@ if __name__ == '__main__':
     
     parser.add_argument('--end', help='Align the ends of the pieces when checking for match.',
                         action='store_true')
+    
+    parser.add_argument('--cut', help='Cut the lengths of the longer piece to the length '
+                        'of the shorter one.', action='store_true')
     
     parser.add_argument('-e', '--exhaustive', help='Search for alignment throughout the '
                         'full MAESTRO dataset for unmatched VirtuosoNet pieces. Otherwise,'
@@ -260,7 +278,8 @@ if __name__ == '__main__':
         group.apply(find_match, axis=1, args=(filtered_maestro, vnet_notes,
                                               maestro_notes, matches),
                     vnet_base=args.virtuoso_net_dir, maestro_base=args.maestro_dir,
-                    num_notes=args.n, align_end=args.end, verbose=args.verbose)
+                    num_notes=args.n, cut_to_min=args.cut, align_end=args.end,
+                    verbose=args.verbose)
         
     if args.exhaustive:
         # Extended search through all MAESTRO pieces
