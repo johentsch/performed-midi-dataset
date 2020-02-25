@@ -102,8 +102,8 @@ def notes_are_similar(notes1, notes2, number_to_match=None, align_end=False, tol
         
     # Cut pieces to the same length with align_end
     if align_end:
-        notes1 = notes1[-min(len(notes1), len(notes2)):]
-        notes2 = notes2[-len(notes1):]
+        notes1 = normalize_midi_notes(notes1[-min(len(notes1), len(notes2)):])
+        notes2 = normalize_midi_notes(notes2[-len(notes1):])
         
     # Here, the note lengths should be equal
     if len(notes1) != len(notes2):
