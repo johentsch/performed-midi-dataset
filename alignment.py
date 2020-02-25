@@ -57,7 +57,7 @@ def normalize_midi_notes(notes):
 
 
 
-def notes_are_similar(notes1, notes2, number_to_match=None, tol=0.03):
+def notes_are_similar(notes1, notes2, number_to_match=None, align_end=False, tol=0.03):
     """
     Test if two notes lists are the same, within some tolerance and up to some
     number of notes. Note start and end times are allowed some given tolerance,
@@ -76,6 +76,12 @@ def notes_are_similar(notes1, notes2, number_to_match=None, tol=0.03):
     number_to_match : int
         Check for matches on the first this many notes. If None, check all notes.
         
+    align_end : boolean
+        If True, align the ends of the two excerpts, and cut each note list to the length
+        of the shorter one (by removing notes from the beginning of the long one).
+        Then, perform the matching as usual, with number_to_match now counting
+        back from the end.
+        
     tol : float
         Note start and end times are allowed to differ by this much to be considered
         matches.
@@ -87,8 +93,17 @@ def notes_are_similar(notes1, notes2, number_to_match=None, tol=0.03):
         tolerance. False otherwise.
     """
     if number_to_match is not None:
-        notes1 = notes1[:number_to_match]
-        notes2 = notes2[:number_to_match]
+        if align_end:
+            notes1 = notes1[-number_to_match:]
+            notes2 = notes2[-number_to_match:]
+        else:
+            notes1 = notes1[:number_to_match]
+            notes2 = notes2[:number_to_match]
+        
+    # Cut pieces to the same length with align_end
+    if align_end:
+        notes1 = notes1[-min(len(notes1), len(notes2)):]
+        notes2 = notes2[-len(notes1):]
         
     # Here, the note lengths should be equal
     if len(notes1) != len(notes2):
@@ -103,8 +118,8 @@ def notes_are_similar(notes1, notes2, number_to_match=None, tol=0.03):
 
 
 
-def find_match(vnet_row, maestro, vnet_notes, maestro_notes, matches,
-               vnet_base='.', maestro_base='maestro', verbose=False):
+def find_match(vnet_row, maestro, vnet_notes, maestro_notes, matches, vnet_base='.',
+               maestro_base='maestro', num_notes=None, align_end=False, verbose=False):
     """
     Find the match of a single row of the VirtuosoNet df, given
     a maestro df.
@@ -134,6 +149,15 @@ def find_match(vnet_row, maestro, vnet_notes, maestro_notes, matches,
     maestro_base : string
         The base directory for the MAESTRO data files.
         
+    num_notes : int
+        Check for matches on the first this many notes. If None, check all notes.
+        
+    align_end : boolean
+        If True, align the ends of the two excerpts, and cut each note list to the length
+        of the shorter one (by removing notes from the beginning of the long one).
+        Then, perform the matching as usual, with number_to_match now counting
+        back from the end.
+        
     verbose : boolean
         Use verbose printing.
     """
@@ -153,7 +177,8 @@ def find_match(vnet_row, maestro, vnet_notes, maestro_notes, matches,
             ))
         maestro_row_notes = maestro_notes[idx]
         
-        if notes_are_similar(vnet_row_notes, maestro_row_notes, 10):
+        if notes_are_similar(vnet_row_notes, maestro_row_notes, number_to_match=num_notes,
+                             align_end=align_end):
             if verbose:
                 print(f'    Match found: "{maestro_row.midi_filename}"')
             if vnet_row.name not in matches:
@@ -165,7 +190,8 @@ def find_match(vnet_row, maestro, vnet_notes, maestro_notes, matches,
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Calculate an alignment for VirtuosoNet'
-                                     ' MIDI files to MAESTRO MIDI files.')
+                                     ' MIDI files to MAESTRO MIDI files.',
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     
     parser.add_argument('-vnd', '--virtuoso_net_dir', help='The path to the VirtuosoNet'
                         ' dataset files.', default='.')
@@ -179,6 +205,12 @@ if __name__ == '__main__':
     
     parser.add_argument('-c', '--composer', help='Search for alignment only within a '
                         'single VirtuosoNet composer.', default=None)
+    
+    parser.add_argument('-n', help='Check this many notes at the beginning of each piece.',
+                        default=None, type=int)
+    
+    parser.add_argument('--end', help='Align the ends of the pieces when checking for match.',
+                        action='store_true')
     
     parser.add_argument('-e', '--exhaustive', help='Search for alignment throughout the '
                         'full MAESTRO dataset for unmatched VirtuosoNet pieces. Otherwise,'
@@ -228,7 +260,7 @@ if __name__ == '__main__':
         group.apply(find_match, axis=1, args=(filtered_maestro, vnet_notes,
                                               maestro_notes, matches),
                     vnet_base=args.virtuoso_net_dir, maestro_base=args.maestro_dir,
-                    verbose=args.verbose)
+                    num_notes=args.n, align_end=args.end, verbose=args.verbose)
         
     if args.exhaustive:
         # Extended search through all MAESTRO pieces
